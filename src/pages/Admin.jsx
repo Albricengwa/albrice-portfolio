@@ -11,14 +11,21 @@ import { usePortfolio } from '../context/PortfolioContext'
    Admin Panel — PIN-gated dashboard for editing all portfolio data
 ---------------------------------------------------------------- */
 export default function Admin() {
-  const { data, updateProfile, addItem, updateItem, removeItem, resetAll, updatePin } = usePortfolio()
+  const { data, remoteStatus, updateProfile, addItem, updateItem, removeItem, resetAll, updatePin, login } = usePortfolio()
   const [authed, setAuthed] = useState(false)
   const [pin, setPin] = useState('')
   const [pinError, setPinError] = useState(false)
   const [tab, setTab] = useState('profile')
-  const [saved, setSaved] = useState(false)
+  const [toast, setToast] = useState(null) // { ok: boolean, message: string } | null
 
-  const flash = () => { setSaved(true); setTimeout(() => setSaved(false), 1500) }
+  const flash = (result) => {
+    const ok = result?.ok !== false
+    const message = ok
+      ? 'Saved — live on the site'
+      : `Saved locally, but publish failed (${result?.reason || 'unknown error'})`
+    setToast({ ok, message })
+    setTimeout(() => setToast(null), ok ? 2200 : 4500)
+  }
 
   if (!authed) {
     return (
@@ -35,7 +42,7 @@ export default function Admin() {
           </div>
           <form onSubmit={(e) => {
             e.preventDefault()
-            if (pin === data.adminPin) { setAuthed(true); setPinError(false) }
+            if (pin === data.adminPin) { login(pin); setAuthed(true); setPinError(false) }
             else { setPinError(true); setPin('') }
           }}>
             <input
@@ -73,10 +80,10 @@ export default function Admin() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Saved toast */}
-      {saved && (
-        <div className="fixed top-6 right-6 z-50 bg-emerald-500 text-white px-5 py-3 rounded-2xl shadow-lg flex items-center gap-2 animate-bounce">
-          <Check className="h-4 w-4" /> Saved!
+      {/* Save toast */}
+      {toast && (
+        <div className={`fixed top-6 right-6 z-50 ${toast.ok ? 'bg-emerald-500' : 'bg-red-500'} text-white px-5 py-3 rounded-2xl shadow-lg flex items-center gap-2 max-w-sm`}>
+          <Check className="h-4 w-4 shrink-0" /> {toast.message}
         </div>
       )}
 
@@ -99,7 +106,14 @@ export default function Admin() {
             ))}
           </nav>
 
-          <Link to="/" className="flex items-center gap-2 text-white/40 hover:text-accent text-sm mt-4 px-3 py-2 transition">
+          <div className="flex items-center gap-2 px-3 py-2 text-xs">
+            <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${remoteStatus === 'live' ? 'bg-emerald-400' : remoteStatus === 'loading' ? 'bg-amber-400 animate-pulse' : 'bg-red-400'}`} />
+            <span className="hidden sm:block text-white/40">
+              {remoteStatus === 'live' ? 'Synced live' : remoteStatus === 'loading' ? 'Connecting…' : 'Offline (local only)'}
+            </span>
+          </div>
+
+          <Link to="/" className="flex items-center gap-2 text-white/40 hover:text-accent text-sm mt-1 px-3 py-2 transition">
             <Eye className="h-4 w-4" />
             <span className="hidden sm:block">View Site</span>
           </Link>
@@ -135,7 +149,7 @@ function ProfileEditor({ flash }) {
   const [photoError, setPhotoError] = useState('')
   const fileInputRef = useRef(null)
 
-  const save = () => { updateProfile(form); flash() }
+  const save = async () => { flash(await updateProfile(form)) }
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }))
 
   // Reads the chosen file, downscales it on a local <canvas>, and stores it
@@ -295,21 +309,16 @@ function ListEditor({ section, fields, flash }) {
     setEditing(item.id)
   }
 
-  const save = () => {
-    if (editing === 'new') {
-      addItem(section, form)
-    } else {
-      updateItem(section, editing, form)
-    }
+  const save = async () => {
+    const result = editing === 'new' ? await addItem(section, form) : await updateItem(section, editing, form)
     setEditing(null)
     setForm({})
-    flash()
+    flash(result)
   }
 
-  const del = (id) => {
+  const del = async (id) => {
     if (confirm('Remove this item?')) {
-      removeItem(section, id)
-      flash()
+      flash(await removeItem(section, id))
     }
   }
 
@@ -423,11 +432,11 @@ function SettingsEditor({ flash }) {
   const [newPin, setNewPin] = useState('')
   const [showPin, setShowPin] = useState(false)
 
-  const savePin = () => {
+  const savePin = async () => {
     if (newPin.length >= 4) {
-      updatePin(newPin)
+      const result = await updatePin(newPin)
       setNewPin('')
-      flash()
+      flash(result)
     }
   }
 
@@ -461,7 +470,7 @@ function SettingsEditor({ flash }) {
       <div className="bg-white border border-red-200 rounded-3xl p-6 sm:p-8">
         <h3 className="font-display font-semibold text-lg mb-2 text-red-600">Danger Zone</h3>
         <p className="text-muted text-sm mb-4">Reset all portfolio data to defaults. This cannot be undone.</p>
-        <button onClick={() => { if (confirm('Reset ALL data to defaults? This cannot be undone.')) { resetAll(); flash() } }} className="inline-flex items-center gap-2 bg-red-500 text-white font-semibold px-5 py-2.5 rounded-full text-sm hover:bg-red-600 transition">
+        <button onClick={async () => { if (confirm('Reset ALL data to defaults? This cannot be undone.')) { flash(await resetAll()) } }} className="inline-flex items-center gap-2 bg-red-500 text-white font-semibold px-5 py-2.5 rounded-full text-sm hover:bg-red-600 transition">
           <RefreshCw className="h-4 w-4" /> Reset Everything
         </button>
       </div>

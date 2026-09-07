@@ -9,7 +9,7 @@ export const DEFAULT_DATA = {
     email: 'ngwaalbrice@gmail.com',
     phone: '',
     linkedin: '',
-    github: '',
+    github: 'https://github.com/Albricengwa',
     photoUrl: '/headshot.jpg',
   },
 

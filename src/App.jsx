@@ -879,6 +879,18 @@ function ContactForm() {
                   </span>
                 </a>
               )}
+
+              {data.profile.github && (
+                <a href={data.profile.github} target="_blank" rel="noopener noreferrer" className="lift-on-hover flex items-center gap-4 group">
+                  <span className="h-12 w-12 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center group-hover:bg-accent transition">
+                    <GitBranch className="h-5 w-5 text-accent group-hover:text-white" />
+                  </span>
+                  <span>
+                    <span className="block font-mono text-[10px] uppercase tracking-widest text-muted">GitHub</span>
+                    <span className="font-display font-semibold text-ink text-lg">View Projects</span>
+                  </span>
+                </a>
+              )}
             </div>
           </div>
 
