@@ -62,8 +62,11 @@ export default async function handler(req, res) {
     try {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
       const { pin, data } = body || {}
-      if (!data || typeof data !== 'object') {
-        return res.status(400).json({ error: 'Missing data' })
+      // Guard against a malformed or partial payload clobbering the whole
+      // site (this has happened once, from a manual test write) — require
+      // the shape of a real portfolio document, not just "some object".
+      if (!data || typeof data !== 'object' || !data.profile?.name || !data.adminPin) {
+        return res.status(400).json({ error: 'Payload does not look like a full portfolio document' })
       }
 
       const { data: current, sha } = await readCurrent()
