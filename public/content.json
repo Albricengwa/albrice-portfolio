@@ -2,12 +2,12 @@
   "profile": {
     "name": "Albrice Fru Ngwa",
     "title": "AI Consultant, Automation Specialist & Software Engineer",
-    "subtitle": "Software Engineer · Marketing Director",
+    "subtitle": "Software Engineer \u00b7 Marketing Director",
     "summary": "I design and build intelligent automation systems, websites, and AI-integrated solutions. With a background spanning software engineering, digital marketing, and business administration, I bring a cross-functional perspective to every project, turning complex business needs into elegant, maintainable solutions.",
-    "location": "International · Remote (US Market)",
+    "location": "International \u00b7 Remote (US Market)",
     "email": "ngwaalbrice@gmail.com",
     "phone": "",
-    "linkedin": "",
+    "linkedin": "https://www.linkedin.com/in/albrice-ngwa-aa9b67302",
     "github": "https://github.com/Albricengwa",
     "photoUrl": "/headshot.jpg"
   },
@@ -52,7 +52,7 @@
       "role": "Marketing Director",
       "company": "Platinium Auto",
       "location": "Cameroon",
-      "period": "2023 – Present",
+      "period": "2023 \u2013 Present",
       "description": "Leading marketing strategy and digital presence for the automotive dealership. Overseeing brand positioning, campaign management, and customer acquisition across digital and traditional channels.",
       "highlights": [
         "Brand strategy & positioning",
@@ -65,7 +65,7 @@
       "role": "Software Engineer",
       "company": "AkwaCam Construction BTP",
       "location": "Cameroon",
-      "period": "2023 – Present",
+      "period": "2023 \u2013 Present",
       "description": "Building and integrating AI-powered solutions into the construction company's operations. Developing internal tools and automating workflows to improve project management efficiency.",
       "highlights": [
         "AI integration",
@@ -125,10 +125,17 @@
   "certifications": [
     {
       "id": "1",
-      "title": "Claude Code Certified",
+      "title": "Claude Code 101",
       "issuer": "Anthropic",
       "year": "2024",
       "icon": "Award"
+    },
+    {
+      "id": "2",
+      "title": "High School Diploma",
+      "issuer": "National Educational College of Arts and Science (NECAS)",
+      "year": "",
+      "icon": "GraduationCap"
     }
   ],
   "services": [

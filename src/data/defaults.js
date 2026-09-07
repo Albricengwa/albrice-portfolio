@@ -8,7 +8,7 @@ export const DEFAULT_DATA = {
     location: 'International · Remote (US Market)',
     email: 'ngwaalbrice@gmail.com',
     phone: '',
-    linkedin: '',
+    linkedin: 'https://www.linkedin.com/in/albrice-ngwa-aa9b67302',
     github: 'https://github.com/Albricengwa',
     photoUrl: '/headshot.jpg',
   },
@@ -101,10 +101,17 @@ export const DEFAULT_DATA = {
   certifications: [
     {
       id: '1',
-      title: 'Claude Code Certified',
+      title: 'Claude Code 101',
       issuer: 'Anthropic',
       year: '2024',
       icon: 'Award',
+    },
+    {
+      id: '2',
+      title: 'High School Diploma',
+      issuer: 'National Educational College of Arts and Science (NECAS)',
+      year: '',
+      icon: 'GraduationCap',
     },
   ],
 
