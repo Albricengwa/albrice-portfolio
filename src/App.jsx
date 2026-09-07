@@ -200,7 +200,7 @@ function Hero() {
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
       {/* Content */}
-      <div className="relative z-10 flex min-h-[100dvh] flex-col justify-center">
+      <div className="relative z-10 flex min-h-[100dvh] flex-col justify-center pt-24 sm:pt-0">
         <div className="max-w-7xl mx-auto w-full px-6 sm:px-10 lg:px-16 grid lg:grid-cols-2 gap-12 items-center">
           {/* Text side */}
           <div>
