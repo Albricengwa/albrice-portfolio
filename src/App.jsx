@@ -829,7 +829,23 @@ function ContactForm() {
     e.preventDefault()
     if (!form.name || !form.email || !form.message) return
     setStatus('sending')
-    setTimeout(() => setStatus('sent'), 1200)
+
+    // No backend here — hand off to the visitor's own email client with
+    // everything pre-filled, addressed to the owner's real inbox. This is
+    // the one delivery path that can't silently fail: it either opens
+    // their mail app, or it doesn't, and either way nothing is lost.
+    const subject = form.subject ? `Portfolio inquiry: ${form.subject}` : `Portfolio inquiry from ${form.name}`
+    const bodyLines = [
+      form.message,
+      '',
+      '---',
+      `From: ${form.name} <${form.email}>`,
+      form.company ? `Company: ${form.company}` : null,
+    ].filter(Boolean)
+    const mailto = `mailto:${data.profile.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`
+    window.location.href = mailto
+
+    setTimeout(() => setStatus('sent'), 500)
   }
 
   return (
@@ -922,8 +938,8 @@ function ContactForm() {
                   <div className="h-16 w-16 mx-auto rounded-full bg-accent/15 flex items-center justify-center mb-6">
                     <CheckCircle2 className="h-8 w-8 text-accent" />
                   </div>
-                  <h3 className="font-display font-bold text-2xl text-ink mb-3">Thanks for reaching out!</h3>
-                  <p className="text-muted max-w-md mx-auto">I'll get back to you as soon as possible to discuss how we can work together.</p>
+                  <h3 className="font-display font-bold text-2xl text-ink mb-3">Almost there!</h3>
+                  <p className="text-muted max-w-md mx-auto">Your email app should have opened with your message ready to send — just hit send there. If nothing opened, email me directly at <a href={`mailto:${data.profile.email}`} className="text-accent underline">{data.profile.email}</a>.</p>
                 </div>
               )}
             </form>
