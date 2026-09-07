@@ -36,6 +36,16 @@ export const DEFAULT_DATA = {
 
   experience: [
     {
+      id: '3',
+      role: 'AI Automation Specialist',
+      company: 'Sabi Network',
+      location: 'Remote',
+      period: '2025 – Present',
+      description:
+        'Building AI-powered automation systems for Sabi Network, including customer service systems, sales automation, and other operational tools.',
+      highlights: ['Customer service systems', 'Sales automation', 'Process automation'],
+    },
+    {
       id: '1',
       role: 'Marketing Director',
       company: 'Platinium Auto',
